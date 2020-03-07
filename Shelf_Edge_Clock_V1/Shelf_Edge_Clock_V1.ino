@@ -5,7 +5,7 @@
 
 More info and build instructions: https://www.youtube.com/watch?v=8E0SeycTzHw
 
-3D printed parts can be downloaded from here: https://www.thingiverse.com/thing:3902329
+3D printed parts can be downloaded from here: https://www.thingiverse.com/thing:4207524
 
 You will need to install the Adafruit Neopixel library which can be found in the library manager.
 
