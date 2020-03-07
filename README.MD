@@ -32,7 +32,7 @@ List of items used in this project and where to find them (the links are Amazon 
 
 ==========
 
-3D printed parts and wiring diagram can be downloaded from here: https://www.thingiverse.com/thing:###
+3D printed parts and wiring diagram can be downloaded from here: https://www.thingiverse.com/thing:4207524
 
 ==========
 
