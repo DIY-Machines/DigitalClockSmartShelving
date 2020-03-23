@@ -29,11 +29,9 @@ INSTAGRAM: https://www.instagram.com/diy_machines/?hl=en
 FACEBOOK: https://www.facebook.com/diymachines/
 
 */
-#define DEBUG true
+#define DEBUG false
 
 #include <Adafruit_NeoPixel.h>
-#ifdef __AVR__
-#endif
 
 #include <DS3231_Simple.h>
 DS3231_Simple Clock;
