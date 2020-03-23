@@ -86,6 +86,8 @@ void setup() {
   stripDownlighter.begin();
   stripDownlighter.show();
   stripDownlighter.setBrightness(50);
+
+  smoothiner.setup(analogRead(A0));
 }
 
 void loop() {

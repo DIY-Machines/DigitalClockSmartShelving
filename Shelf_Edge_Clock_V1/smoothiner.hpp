@@ -7,6 +7,11 @@ struct Smoothiner {
     return sizeof readings / sizeof readings[0];
   }
 
+  void setup(long reading) {
+
+    memset(&readings, reading, numReadings());
+  }
+
   void addReading(long reading) {
 
     readings[current] = reading;
