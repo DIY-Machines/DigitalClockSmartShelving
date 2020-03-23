@@ -202,32 +202,3 @@ void displayTheTime() {
     stripClock.fill(clockHourColour, 189, 18);
   }
 }
-
-typedef void (*digitCallback)(long, int);
-
-digitCallback digitCallbackList[] =
-    { &digitZero
-    , &digitTwo
-    , &digitThree
-    , &digitFour
-    , &digitFive
-    , &digitSix
-    , &digitSeven
-    , &digitEight
-    , &digitNine
-    , NULL
-    };
-
-void displayNumber(long digitToDisplay, int offsetBy, int colourToUse) {
-
-  if (digitToDisplay < 0 || digitToDisplay > 9) {
-#if DEBUG
-    Serial.print("Wrong digit '");
-    Serial.print(digitToDisplay);
-    Serial.print("'");
-#endif // DEBUG
-    return;
-  }
-
-  digitCallbackList[digitToDisplay](offsetBy, colourToUse);
-}

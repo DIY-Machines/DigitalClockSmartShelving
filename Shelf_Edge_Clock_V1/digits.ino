@@ -44,3 +44,33 @@ void digitEight(long offset, int colour){
 void digitNine(long offset, int colour){
     stripClock.fill(colour, (0 + offset), 45);
 }
+
+
+typedef void (*digitCallback)(long, int);
+
+digitCallback digitCallbackList[] =
+    { &digitZero
+    , &digitTwo
+    , &digitThree
+    , &digitFour
+    , &digitFive
+    , &digitSix
+    , &digitSeven
+    , &digitEight
+    , &digitNine
+    , NULL
+    };
+
+void displayNumber(long digitToDisplay, int offsetBy, int colourToUse) {
+
+  if (digitToDisplay < 0 || digitToDisplay > 9) {
+#if DEBUG
+    Serial.print("Wrong digit '");
+    Serial.print(digitToDisplay);
+    Serial.print("'");
+#endif // DEBUG
+    return;
+  }
+
+  digitCallbackList[digitToDisplay](offsetBy, colourToUse);
+}
