@@ -69,12 +69,60 @@ Adafruit_NeoPixel stripDownlighter(LEDDOWNLIGHT_COUNT, LEDDOWNLIGHT_PIN, NEO_GRB
 
 
 //Smoothing of the readings from the light sensor so it is not too twitchy
-const int numReadings = 12;
 
-int readings[numReadings];      // the readings from the analog input
-int readIndex = 0;
-long total = 0;
-long average = 0;
+struct {
+  const int numReadings() const {
+
+    return sizeof readings / sizeof readings[0];
+  }
+
+  void addReading(long reading) {
+
+    readings[current] = reading;
+    ++current;
+
+    // if we're at the end of the array move the index back around...
+    if (current == numReadings()) {
+
+      current = 0;
+    }
+
+#if DEBUG
+    Serial.print("Light sensor value added to array = ");
+    Serial.println(reading);
+#endif //DEBUG
+  }
+
+  long const getAverage() const {
+
+    // now work out the sum of all the values in the array
+    int average = 0;
+    for (int i=0; i < numReadings(); ++i) {
+
+      average += readings[i];
+    }
+
+  #if DEBUG
+    Serial.print("Sum of the brightness array = ");
+    Serial.println(average);
+  #endif //DEBUG
+
+    // and calculate the average:
+    average /= numReadings();
+
+  #if DEBUG
+    Serial.print("Average light sensor value = ");
+    Serial.println(average);
+  #endif //DEBUG
+
+    return average;
+  }
+
+  long readings[12]; // the readings from the analog input
+  long current;
+  long total;
+  long average;
+} smoothiner;
 
 void setup() {
 
@@ -98,45 +146,12 @@ void loop() {
   readTheTime();
   displayTheTime();
 
-
-  //Record a reading from the light sensor and add it to the array
-  readings[readIndex] = analogRead(A0);
-
-#if DEBUG
-  Serial.print("Light sensor value added to array = ");
-  Serial.println(readings[readIndex]);
-#endif //DEBUG
-
-  ++readIndex;
-
-  // if we're at the end of the array move the index back around...
-  if (readIndex == numReadings) {
-    readIndex = 0;
-  }
-
-  //now work out the sum of all the values in the array
-  int sumBrightness = 0;
-  for (int i=0; i < numReadings; i++)
-    {
-        sumBrightness += readings[i];
-    }
-
-#if DEBUG
-  Serial.print("Sum of the brightness array = ");
-  Serial.println(sumBrightness);
-#endif //DEBUG
-
-  // and calculate the average:
-  int lightSensorValue = sumBrightness / numReadings;
-
-#if DEBUG
-  Serial.print("Average light sensor value = ");
-  Serial.println(lightSensorValue);
-#endif //DEBUG
-
+  // Record a reading from the light sensor and add it to the smoothiner
+  smoothiner.addReading(analogRead(A0));
 
   //set the brightness based on ambiant light levels
-  clockFaceBrightness = map(lightSensorValue,50, 1000, 200, 1);
+  long lightSensorValue = smoothiner.getAverage();
+  clockFaceBrightness = map(lightSensorValue, 50, 1000, 200, 1);
   stripClock.setBrightness(clockFaceBrightness); // Set brightness value of the LEDs
 
 #if DEBUG
