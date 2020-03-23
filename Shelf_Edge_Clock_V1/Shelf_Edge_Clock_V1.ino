@@ -29,10 +29,7 @@ INSTAGRAM: https://www.instagram.com/diy_machines/?hl=en
 FACEBOOK: https://www.facebook.com/diymachines/
 
 */
-
-
-
-
+#define DEBUG true
 
 #include <Adafruit_NeoPixel.h>
 #ifdef __AVR__
@@ -83,7 +80,10 @@ long average = 0;                // the average
 
 void setup() {
 
+#if DEBUG
   Serial.begin(9600);
+#endif //DEBUG
+
   Clock.begin();
 
   stripClock.begin();           // INITIALIZE NeoPixel stripClock object (REQUIRED)
@@ -109,8 +109,11 @@ void loop() {
 
   //Record a reading from the light sensor and add it to the array
   readings[readIndex] = analogRead(A0); //get an average light level from previouse set of samples
+#if DEBUG
   Serial.print("Light sensor value added to array = ");
   Serial.println(readings[readIndex]);
+#endif //DEBUG
+
   readIndex = readIndex + 1; // advance to the next position in the array:
 
   // if we're at the end of the array move the index back around...
@@ -125,20 +128,28 @@ void loop() {
     {
         sumBrightness += readings[i];
     }
+#if DEBUG
   Serial.print("Sum of the brightness array = ");
   Serial.println(sumBrightness);
+#endif //DEBUG
 
   // and calculate the average: 
   int lightSensorValue = sumBrightness / numReadings;
+
+#if DEBUG
   Serial.print("Average light sensor value = ");
   Serial.println(lightSensorValue);
+#endif //DEBUG
 
 
   //set the brightness based on ambiant light levels
   clockFaceBrightness = map(lightSensorValue,50, 1000, 200, 1); 
   stripClock.setBrightness(clockFaceBrightness); // Set brightness value of the LEDs
+
+#if DEBUG
   Serial.print("Mapped brightness value = ");
   Serial.println(clockFaceBrightness);
+#endif //DEBUG
   
   stripClock.show();
 
@@ -155,7 +166,7 @@ void readTheTime(){
   // Ask the clock for the data.
   MyDateAndTime = Clock.read();
   
-  // And use it
+#if DEBUG
   Serial.println("");
   Serial.print("Time is: ");   Serial.print(MyDateAndTime.Hour);
   Serial.print(":"); Serial.print(MyDateAndTime.Minute);
@@ -163,6 +174,7 @@ void readTheTime(){
   Serial.print("Date is: 20");   Serial.print(MyDateAndTime.Year);
   Serial.print(":");  Serial.print(MyDateAndTime.Month);
   Serial.print(":");    Serial.println(MyDateAndTime.Day);
+#endif //DEBUG
 }
 
 void displayTheTime(){
