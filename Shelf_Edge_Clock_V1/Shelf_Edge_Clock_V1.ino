@@ -94,13 +94,6 @@ void setup() {
   stripDownlighter.begin();           // INITIALIZE NeoPixel stripClock object (REQUIRED)
   stripDownlighter.show();            // Turn OFF all pixels ASAP
   stripDownlighter.setBrightness(50); // Set BRIGHTNESS (max = 255)
-
-  //smoothing
-    // initialize all the readings to 0:
-  for (int thisReading = 0; thisReading < numReadings; thisReading++) {
-    readings[thisReading] = 0;
-  }
-  
 }
 
 void loop() {
