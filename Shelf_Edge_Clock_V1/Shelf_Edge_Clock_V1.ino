@@ -203,40 +203,31 @@ void displayTheTime() {
   }
 }
 
+typedef void (*digitCallback)(int, int);
 
-void displayNumber(int digitToDisplay, int offsetBy, int colourToUse){
-    switch (digitToDisplay){
-    case 0:
-    digitZero(offsetBy,colourToUse);
-      break;
-    case 1:
-      digitOne(offsetBy,colourToUse);
-      break;
-    case 2:
-    digitTwo(offsetBy,colourToUse);
-      break;
-    case 3:
-    digitThree(offsetBy,colourToUse);
-      break;
-    case 4:
-    digitFour(offsetBy,colourToUse);
-      break;
-    case 5:
-    digitFive(offsetBy,colourToUse);
-      break;
-    case 6:
-    digitSix(offsetBy,colourToUse);
-      break;
-    case 7:
-    digitSeven(offsetBy,colourToUse);
-      break;
-    case 8:
-    digitEight(offsetBy,colourToUse);
-      break;
-    case 9:
-    digitNine(offsetBy,colourToUse);
-      break;
-    default:
-     break;
+digitCallback digitCallbackList[] =
+    { &digitZero
+    , &digitTwo
+    , &digitThree
+    , &digitFour
+    , &digitFive
+    , &digitSix
+    , &digitSeven
+    , &digitEight
+    , &digitNine
+    , NULL
+    };
+
+void displayNumber(int digitToDisplay, int offsetBy, int colourToUse) {
+
+  if (digitToDisplay < 0 || digitToDisplay > 9) {
+#if DEBUG
+    Serial.print("Wrong digit '");
+    Serial.print(digitToDisplay);
+    Serial.print("'");
+#endif // DEBUG
+    return;
   }
+
+  digitCallbackList[digitToDisplay](offsetBy, colourToUse);
 }
