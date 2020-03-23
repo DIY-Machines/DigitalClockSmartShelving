@@ -38,7 +38,7 @@ FACEBOOK: https://www.facebook.com/diymachines/
 #include <DS3231_Simple.h>
 DS3231_Simple Clock;
 
-// Create a variable to hold the time data 
+// Create a variable to hold the time data
 DateTime MyDateAndTime;
 
 // Which pin on the Arduino is connected to the NeoPixels?
@@ -72,11 +72,9 @@ Adafruit_NeoPixel stripDownlighter(LEDDOWNLIGHT_COUNT, LEDDOWNLIGHT_PIN, NEO_GRB
 const int numReadings = 12;
 
 int readings[numReadings];      // the readings from the analog input
-int readIndex = 0;              // the index of the current reading
-long total = 0;                  // the running total
-long average = 0;                // the average
-
-
+int readIndex = 0;
+long total = 0;
+long average = 0;
 
 void setup() {
 
@@ -88,37 +86,31 @@ void setup() {
 
   stripClock.begin();           // INITIALIZE NeoPixel stripClock object (REQUIRED)
   stripClock.show();            // Turn OFF all pixels ASAP
-  stripClock.setBrightness(100); // Set inital BRIGHTNESS (max = 255)
- 
+  stripClock.setBrightness(100);
 
-  stripDownlighter.begin();           // INITIALIZE NeoPixel stripClock object (REQUIRED)
-  stripDownlighter.show();            // Turn OFF all pixels ASAP
-  stripDownlighter.setBrightness(50); // Set BRIGHTNESS (max = 255)
+  stripDownlighter.begin();
+  stripDownlighter.show();
+  stripDownlighter.setBrightness(50);
 }
 
 void loop() {
-  
-  //read the time
-  readTheTime();
 
-  //display the time on the LEDs
+  readTheTime();
   displayTheTime();
 
 
-
-
   //Record a reading from the light sensor and add it to the array
-  readings[readIndex] = analogRead(A0); //get an average light level from previouse set of samples
+  readings[readIndex] = analogRead(A0);
+
 #if DEBUG
   Serial.print("Light sensor value added to array = ");
   Serial.println(readings[readIndex]);
 #endif //DEBUG
 
-  readIndex = readIndex + 1; // advance to the next position in the array:
+  ++readIndex;
 
   // if we're at the end of the array move the index back around...
-  if (readIndex >= numReadings) {
-    // ...wrap around to the beginning:
+  if (readIndex == numReadings) {
     readIndex = 0;
   }
 
@@ -128,12 +120,13 @@ void loop() {
     {
         sumBrightness += readings[i];
     }
+
 #if DEBUG
   Serial.print("Sum of the brightness array = ");
   Serial.println(sumBrightness);
 #endif //DEBUG
 
-  // and calculate the average: 
+  // and calculate the average:
   int lightSensorValue = sumBrightness / numReadings;
 
 #if DEBUG
@@ -143,14 +136,14 @@ void loop() {
 
 
   //set the brightness based on ambiant light levels
-  clockFaceBrightness = map(lightSensorValue,50, 1000, 200, 1); 
+  clockFaceBrightness = map(lightSensorValue,50, 1000, 200, 1);
   stripClock.setBrightness(clockFaceBrightness); // Set brightness value of the LEDs
 
 #if DEBUG
   Serial.print("Mapped brightness value = ");
   Serial.println(clockFaceBrightness);
 #endif //DEBUG
-  
+
   stripClock.show();
 
    //(red * 65536) + (green * 256) + blue ->for 32-bit merged colour value so 16777215 equals white
@@ -158,14 +151,13 @@ void loop() {
   stripDownlighter.show();
 
   delay(5000);   //this 5 second delay to slow things down during testing
-
 }
 
 
-void readTheTime(){
-  // Ask the clock for the data.
+void readTheTime() {
+
   MyDateAndTime = Clock.read();
-  
+
 #if DEBUG
   Serial.println("");
   Serial.print("Time is: ");   Serial.print(MyDateAndTime.Hour);
@@ -177,36 +169,39 @@ void readTheTime(){
 #endif //DEBUG
 }
 
-void displayTheTime(){
+void displayTheTime() {
 
-  stripClock.clear(); //clear the clock face 
+  stripClock.clear();
 
-  
-  int firstMinuteDigit = MyDateAndTime.Minute % 10; //work out the value of the first digit and then display it
+  // work out the value of the first digit and then display it
+  int firstMinuteDigit = MyDateAndTime.Minute % 10;
   displayNumber(firstMinuteDigit, 0, clockMinuteColour);
 
-  
-  int secondMinuteDigit = floor(MyDateAndTime.Minute / 10); //work out the value for the second digit and then display it
-  displayNumber(secondMinuteDigit, 63, clockMinuteColour);  
+  // work out the value for the second digit and then display it
+  int secondMinuteDigit = floor(MyDateAndTime.Minute / 10);
+  displayNumber(secondMinuteDigit, 63, clockMinuteColour);
 
-
-  int firstHourDigit = MyDateAndTime.Hour; //work out the value for the third digit and then display it
-  if (firstHourDigit > 12){
-    firstHourDigit = firstHourDigit - 12;
+  // work out the value for the third digit and then display it
+  int firstHourDigit = MyDateAndTime.Hour;
+  if (firstHourDigit > 12) {
+    firstHourDigit -= 12;
   }
-  firstHourDigit = firstHourDigit % 10;
+
+  firstHourDigit %= 10;
   displayNumber(firstHourDigit, 126, clockHourColour);
 
+  // work out the value for the fourth digit and then display it
+  int secondHourDigit = MyDateAndTime.Hour;
+  if (secondHourDigit > 12) {
 
-  int secondHourDigit = MyDateAndTime.Hour; //work out the value for the fourth digit and then display it
-  if (secondHourDigit > 12){
-    secondHourDigit = secondHourDigit - 12;
+    secondHourDigit -= 12;
   }
-    if (secondHourDigit > 9){
-      stripClock.fill(clockHourColour,189, 18); 
-    }
 
+  if (secondHourDigit > 9) {
+
+    stripClock.fill(clockHourColour, 189, 18);
   }
+}
 
 
 void displayNumber(int digitToDisplay, int offsetBy, int colourToUse){
