@@ -49,9 +49,9 @@ DateTime MyDateAndTime;
 #define LEDCLOCK_COUNT 216
 #define LEDDOWNLIGHT_COUNT 12
 
-  //(red * 65536) + (green * 256) + blue ->for 32-bit merged colour value so 16777215 equals white
-int clockMinuteColour = 51200; //1677
-int clockHourColour = 140000000; //7712
+//(red * 65536) + (green * 256) + blue ->for 32-bit merged colour value so 16777215 equals white
+long clockMinuteColour = 51200; //1677
+long clockHourColour = 140000000; //7712
 
 int clockFaceBrightness = 0;
 
@@ -203,7 +203,7 @@ void displayTheTime() {
   }
 }
 
-typedef void (*digitCallback)(int, int);
+typedef void (*digitCallback)(long, int);
 
 digitCallback digitCallbackList[] =
     { &digitZero
@@ -218,7 +218,7 @@ digitCallback digitCallbackList[] =
     , NULL
     };
 
-void displayNumber(int digitToDisplay, int offsetBy, int colourToUse) {
+void displayNumber(long digitToDisplay, int offsetBy, int colourToUse) {
 
   if (digitToDisplay < 0 || digitToDisplay > 9) {
 #if DEBUG
