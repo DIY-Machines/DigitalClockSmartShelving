@@ -52,14 +52,16 @@ DateTime MyDateAndTime;
 #define LEDCLOCK_COUNT 216
 #define LEDDOWNLIGHT_COUNT 12
 
-  //(red * 65536) + (green * 256) + blue ->for 32-bit merged colour value so 16777215 equals white
-int clockMinuteColour = 51200; //1677
-int clockHourColour = 140000000; //7712
+//(red * 65536) + (green * 256) + blue ->for 32-bit merged colour value so 16777215 equals white
+// or 3 hex byte 00 -> ff for RGB eg 0x123456 for red=12(hex) green=34(hex), and green=56(hex) 
+// this hex method is the same as html colour codes just with "0x" instead of "#" in front
+uint32_t clockMinuteColour = 0x800000; // pure red 
+uint32_t clockHourColour = 0x008000;   // pure green
 
 int clockFaceBrightness = 0;
 
 // Declare our NeoPixel objects:
-Adafruit_NeoPixel stripClock(LEDCLOCK_COUNT, LEDCLOCK_PIN, NEO_RGB + NEO_KHZ800);
+Adafruit_NeoPixel stripClock(LEDCLOCK_COUNT, LEDCLOCK_PIN, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel stripDownlighter(LEDDOWNLIGHT_COUNT, LEDDOWNLIGHT_PIN, NEO_GRB + NEO_KHZ800);
 // Argument 1 = Number of pixels in NeoPixel strip
 // Argument 2 = Arduino pin number (most are valid)
@@ -204,7 +206,7 @@ void displayTheTime(){
   }
 
 
-void displayNumber(int digitToDisplay, int offsetBy, int colourToUse){
+void displayNumber(int digitToDisplay, int offsetBy, uint32_t colourToUse){
     switch (digitToDisplay){
     case 0:
     digitZero(offsetBy,colourToUse);
