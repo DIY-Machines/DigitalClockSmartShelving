@@ -189,12 +189,24 @@ void displayTheTime(){
   if (firstHourDigit > 12){
     firstHourDigit = firstHourDigit - 12;
   }
+ 
+ // Comment out the following three lines if you want midnight to be shown as 12:00 instead of 0:00
+//  if (firstHourDigit == 0){
+//    firstHourDigit = 12;
+//  }
+ 
   firstHourDigit = firstHourDigit % 10;
   displayNumber(firstHourDigit, 126, clockHourColour);
 
 
   int secondHourDigit = MyDateAndTime.Hour; //work out the value for the fourth digit and then display it
-  if (secondHourDigit > 12){
+
+// Comment out the following three lines if you want midnight to be shwon as 12:00 instead of 0:00
+//  if (secondHourDigit == 0){
+//    secondHourDigit = 12;
+//  }
+ 
+ if (secondHourDigit > 12){
     secondHourDigit = secondHourDigit - 12;
   }
     if (secondHourDigit > 9){
