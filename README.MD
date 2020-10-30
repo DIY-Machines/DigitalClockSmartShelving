@@ -1,5 +1,7 @@
-# Hidden Digital Clock SMart Shelving
+# Hidden Digital Clock Smart Shelving
 A DIY, 3d Printed, Arduino powered, time-telling, shelving project.
+
+Find a detailed build instructions in video form, plus FAQ's to common problems and wiring diagrams here: https://www.diymachines.co.uk/how-to-build-a-giant-hidden-shelf-edge-clock
 
 ==========
 
