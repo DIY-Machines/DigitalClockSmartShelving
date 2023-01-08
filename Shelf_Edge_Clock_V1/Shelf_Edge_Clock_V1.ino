@@ -47,9 +47,10 @@ DateTime MyDateAndTime;
 // Which pin on the Arduino is connected to the NeoPixels?
 #define LEDCLOCK_PIN    6
 #define LEDDOWNLIGHT_PIN    5
+#define LED_PER_SEG 7   // define no of leds per segment here no further changes required 
 
 // How many NeoPixels are attached to the Arduino?
-#define LEDCLOCK_COUNT 216
+#define LEDCLOCK_COUNT (23*LED_PER_SEG)
 #define LEDDOWNLIGHT_COUNT 12
 
 //(red * 65536) + (green * 256) + blue ->for 32-bit merged colour value so 16777215 equals white
@@ -184,7 +185,7 @@ void displayTheTime(){
 
   
   int secondMinuteDigit = floor(MyDateAndTime.Minute / 10); //work out the value for the second digit and then display it
-  displayNumber(secondMinuteDigit, 63, clockMinuteColour);  
+  displayNumber(secondMinuteDigit, (7*LED_PER_SEG), clockMinuteColour);  
 
 
   int firstHourDigit = MyDateAndTime.Hour; //work out the value for the third digit and then display it
@@ -198,7 +199,7 @@ void displayTheTime(){
 //  }
  
   firstHourDigit = firstHourDigit % 10;
-  displayNumber(firstHourDigit, 126, clockHourColour);
+  displayNumber(firstHourDigit, (14*LED_PER_SEG), clockHourColour);
 
 
   int secondHourDigit = MyDateAndTime.Hour; //work out the value for the fourth digit and then display it
@@ -212,7 +213,7 @@ void displayTheTime(){
     secondHourDigit = secondHourDigit - 12;
   }
     if (secondHourDigit > 9){
-      stripClock.fill(clockHourColour,189, 18); 
+      stripClock.fill(clockHourColour,(21*LED_PER_SEG), 18); 
     }
 
   }
